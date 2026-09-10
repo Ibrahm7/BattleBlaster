@@ -17,8 +17,8 @@ ATank::ATank(){
 void ATank::BeginPlay()
 {
 	Super::BeginPlay();
-
-    if(APlayerController* PlayerController = Cast<APlayerController>(Controller)){
+    PlayerController = Cast<APlayerController>(Controller);
+    if(PlayerController){
         if(ULocalPlayer* LocalPlayer = PlayerController->GetLocalPlayer()){
             UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(LocalPlayer);
             if(Subsystem){
@@ -34,7 +34,7 @@ void ATank::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-    APlayerController* PlayerController = Cast<APlayerController>(GetController());
+    PlayerController = Cast<APlayerController>(GetController());
 
     if(PlayerController){
         FHitResult HitResult;
@@ -74,3 +74,24 @@ void ATank::TurnInput(const FInputActionValue &Value)
     DeltaRotation.Yaw = TurnRate * InputValue * GetWorld()->GetDeltaSeconds();
     AddActorLocalRotation(DeltaRotation,true);
 }
+
+void ATank::HandleDestruction()
+{
+    Super::HandleDestruction();
+    SetActorHiddenInGame(true); //true ise non-visible actor
+    SetActorTickEnabled(false); //tick fonksiyonunu devre dışı bıraktık 
+    SetPlayerEnabled(false);
+    isAlive = false;
+}
+
+void ATank::SetPlayerEnabled(bool Enabled)
+{
+    if(PlayerController){
+        if(Enabled){
+            EnableInput(PlayerController);
+        }else{
+            DisableInput(PlayerController);
+        }
+    }
+}
+

@@ -35,4 +35,6 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	float FireRate = 2.0f;
+
+	void HandleDestruction();
 };

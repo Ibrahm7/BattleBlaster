@@ -59,4 +59,11 @@ public:
 
 	void MoveInput(const FInputActionValue& Value);
 	void TurnInput(const FInputActionValue& Value);
+
+	void HandleDestruction();
+	void SetPlayerEnabled(bool Enabled);
+
+	APlayerController* PlayerController; 
+
+	bool isAlive = true;
 };
