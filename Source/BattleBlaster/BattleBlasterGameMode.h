@@ -23,4 +23,9 @@ public:
 	int32 TowerCount;
 
 	void ActorDied(AActor* DeadActor);
+
+	UPROPERTY(EditAnywhere)
+	float GameOverDelay = 3.0f;
+
+	void OnGameOverTimerTimeout();
 };
