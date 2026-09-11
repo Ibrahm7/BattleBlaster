@@ -24,6 +24,9 @@ public:
 
 	void ActorDied(AActor* DeadActor);
 
+    bool isVictory = false;
+
+
 	UPROPERTY(EditAnywhere)
 	float GameOverDelay = 3.0f;
 
