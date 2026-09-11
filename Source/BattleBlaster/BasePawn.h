@@ -7,6 +7,7 @@
 
 #include "Components/CapsuleComponent.h"
 #include "Projectile.h"
+#include "NiagaraFunctionLibrary.h"
 #include "BasePawn.generated.h"
 
 UCLASS()
@@ -38,4 +39,7 @@ public:
 	void Fire();
 
 	void HandleDestruction();
+
+	UPROPERTY(EditAnywhere)
+	UNiagaraSystem* DeathParticles;
 };
