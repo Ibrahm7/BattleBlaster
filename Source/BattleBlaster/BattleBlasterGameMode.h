@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
 #include "Tank.h"
+#include "ScreenMessage.h"
 #include "BattleBlasterGameMode.generated.h"
 
 /**
@@ -39,4 +40,9 @@ public:
 	FTimerHandle CountdownTimerHandle;
 
 	void OnCountdownTimerTimeout();
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UScreenMessage> ScreenMessageClass;
+
+	UScreenMessage* ScreenMessageWidget;
 };

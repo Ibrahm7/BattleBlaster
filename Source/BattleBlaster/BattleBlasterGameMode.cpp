@@ -4,6 +4,7 @@
 #include "BattleBlasterGameMode.h"
 #include "Kismet/GameplayStatics.h"
 #include "Tower.h"
+#include "ScreenMessage.h"
 #include "BattleBlasterGameInstance.h"
 
 void ABattleBlasterGameMode::BeginPlay()
@@ -36,6 +37,15 @@ void ABattleBlasterGameMode::BeginPlay()
         LoopIndex++;
     }
 
+    APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(),0);
+    if(PlayerController){
+        ScreenMessageWidget = CreateWidget<UScreenMessage>(PlayerController,ScreenMessageClass);
+        if(ScreenMessageWidget){
+            ScreenMessageWidget->AddToPlayerScreen();
+            ScreenMessageWidget->SetMessageText("Get Ready!");
+        }
+    }
+
     CountdownSeconds = CountdownDelay;
     GetWorldTimerManager().SetTimer(CountdownTimerHandle,this,&ABattleBlasterGameMode::OnCountdownTimerTimeout,1.0f,true);
 }
@@ -44,14 +54,13 @@ void ABattleBlasterGameMode::OnCountdownTimerTimeout()
 {
     CountdownSeconds -= 1;
     if(CountdownSeconds > 0){
-        UE_LOG(LogTemp,Display,TEXT("Countdown: %d"),CountdownSeconds);
-
+        ScreenMessageWidget->SetMessageText(FString::FromInt(CountdownSeconds));
     }else if(CountdownSeconds == 0){
-        UE_LOG(LogTemp,Display,TEXT("GO!"));
+        ScreenMessageWidget->SetMessageText("GO!");
         Tank->SetPlayerEnabled(true);
     }else{
         GetWorldTimerManager().ClearTimer(CountdownTimerHandle);
-        UE_LOG(LogTemp,Display,TEXT("Clear Timer"));
+        ScreenMessageWidget->SetVisibility(ESlateVisibility::Hidden);
     }
 }
 
@@ -74,9 +83,9 @@ void ABattleBlasterGameMode::ActorDied(AActor *DeadActor)
     }
 
     if(isGameOver){
-        FString GameOverString = isVictory ? "Victory" : "Defeat";
-        UE_LOG(LogTemp,Display,TEXT("Game over: %s"),*GameOverString);
-
+        FString GameOverString = isVictory ? "Victory!" : "Defeat!";
+        ScreenMessageWidget->SetMessageText(GameOverString);
+        ScreenMessageWidget->SetVisibility(ESlateVisibility::Visible);
         FTimerHandle GameOverTimerHandle;
         GetWorldTimerManager().SetTimer(GameOverTimerHandle,this,&ABattleBlasterGameMode::OnGameOverTimerTimeout,GameOverDelay,false);
     }
