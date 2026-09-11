@@ -26,9 +26,17 @@ public:
 
     bool isVictory = false;
 
-
 	UPROPERTY(EditAnywhere)
 	float GameOverDelay = 3.0f;
 
 	void OnGameOverTimerTimeout();
+
+	UPROPERTY(EditAnywhere)
+	int32 CountdownDelay = 3;
+
+	int32 CountdownSeconds;
+
+	FTimerHandle CountdownTimerHandle;
+
+	void OnCountdownTimerTimeout();
 };
