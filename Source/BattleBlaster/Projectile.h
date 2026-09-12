@@ -44,4 +44,10 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	UNiagaraSystem* HitParticles;
+
+	UPROPERTY(EditAnywhere)
+	USoundBase* LaunchSound;
+
+	UPROPERTY(EditAnywhere)
+	USoundBase* HitSound;
 };
